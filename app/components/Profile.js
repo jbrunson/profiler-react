@@ -3,15 +3,45 @@ import { Router } from 'react-router';
 import Repos from './Github/Repos';
 import  UserProfile from './Github/UserProfile';
 import Notes from './Notes/Notes';
+import helpers from '../utils/helpers';
+import Rebase from 're-base';
+
+var base = Rebase.createClass('https://github-note-taker.firebaseio.com/');
 
 class Profile extends React.Component {
   constructor(props) {  //set class state - props of the constructor
     super(props);
     this.state = {
-      notes: ['note1', 'note2'],
-      bio: {name: "jeff"},
-      repos: [1,2,3]
+      notes: [],
+      bio: {},
+      repos: []
     };
+  }
+  init() {
+    this.ref = base.bindToState(this.router.getCurrentParams().username, {
+      context: this,
+      asArray: true,
+      state: 'notes'
+    });
+  }
+  componentDidMount() {
+    this.init();
+    
+    helpers.getGithubInfo(this.router.getCurrentParams().username)
+      .then((dataObj) => {
+        this.setState({
+          bio: dataObj.bio,
+          repos: dataObj.repos
+        });
+      });
+  }
+  componentWillUnmount() {
+    base.removeBinding(this.ref);
+  }
+  handleAddNote(newNote) {
+    base.post(this.router.getCurrentParams().username, {
+      data: this.state.notes.concat(newNote)
+    });
   }
 
   componentWillMount() {
@@ -29,7 +59,10 @@ class Profile extends React.Component {
           <Repos username={username} repos={this.state.repos}/>
         </div>
         <div className="col-md-4">
-          <Notes username={username} notes={this.state.notes} />
+          <Notes 
+            username={username} 
+            notes={this.state.notes}
+            addNote={this.handleAddNote.bind(this)} />
         </div>
       </div>
     )
@@ -38,7 +71,7 @@ class Profile extends React.Component {
 
 Profile.contextTypes = {
   router: React.PropTypes.func.isRequired
-}
+};
 
 
 export default Profile;
