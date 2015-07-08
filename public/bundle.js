@@ -23861,6 +23861,11 @@
 
 	;
 
+	Repos.propTypes = {
+	  username: _react2['default'].PropTypes.string.isRequired,
+	  repos: _react2['default'].PropTypes.array.isRequired
+	};
+
 	exports['default'] = Repos;
 	module.exports = exports['default'];
 
@@ -23920,6 +23925,11 @@
 
 	;
 
+	UserProfile.propTypes = {
+	  username: _react2['default'].PropTypes.string.isRequired,
+	  bio: _react2['default'].PropTypes.object.isRequired
+	};
+
 	exports['default'] = UserProfile;
 	module.exports = exports['default'];
 
@@ -23978,6 +23988,11 @@
 	})(_react2['default'].Component);
 
 	;
+
+	Notes.propTypes = {
+	  username: _react2['default'].PropTypes.string.isRequired,
+	  notes: _react2['default'].PropTypes.array.isRequired
+	};
 
 	exports['default'] = Notes;
 	module.exports = exports['default'];
