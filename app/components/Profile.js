@@ -23,10 +23,7 @@ class Profile extends React.Component {
       asArray: true,
       state: 'notes'
     });
-  }
-  componentDidMount() {
-    this.init();
-    
+
     helpers.getGithubInfo(this.router.getCurrentParams().username)
       .then((dataObj) => {
         this.setState({
@@ -34,6 +31,14 @@ class Profile extends React.Component {
           repos: dataObj.repos
         });
       });
+
+  }
+  componentDidMount() {
+    this.init();
+  }
+  componentWillReceiveProps() {
+    base.removeBinding(this.ref)
+    this.init();
   }
   componentWillUnmount() {
     base.removeBinding(this.ref);
@@ -72,6 +77,5 @@ class Profile extends React.Component {
 Profile.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
-
 
 export default Profile;
